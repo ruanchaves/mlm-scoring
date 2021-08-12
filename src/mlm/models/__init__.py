@@ -91,7 +91,7 @@ def get_pretrained(ctxs: List[mx.Context], name: str = 'bert-base-en-uncased', p
         model_fullname = name
         model_name = model_fullname.split('/')[-1]
 
-        if model_name.startswith('albert-'):
+        if model_name.startswith('albert-') or 'albert' == os.environ.get('MLM_MODEL_NAME', ''):
 
             if params_file is None:
                 model, loading_info = AlbertForMaskedLMOptimized.from_pretrained(model_fullname, output_loading_info=True)
@@ -101,17 +101,7 @@ def get_pretrained(ctxs: List[mx.Context], name: str = 'bert-base-en-uncased', p
             tokenizer = transformers.AlbertTokenizer.from_pretrained(model_fullname)
             vocab = None
 
-        elif model_name.startswith('bert-'):
-
-            if params_file is None:
-                model, loading_info = BertForMaskedLMOptimized.from_pretrained(model_fullname, output_loading_info=True)
-            else:
-                model, loading_info = BertForMaskedLMOptimized.from_pretrained(params_file, output_loading_info=True)
-
-            tokenizer = transformers.BertTokenizer.from_pretrained(model_fullname)
-            vocab = None
-
-        elif model_name.startswith('distilbert-'):
+        elif model_name.startswith('distilbert-') or 'distilbert' == os.environ.get('MLM_MODEL_NAME', ''):
 
             if params_file is None:
                 model, loading_info = DistilBertForMaskedLMOptimized.from_pretrained(model_fullname, output_loading_info=True)
@@ -121,7 +111,7 @@ def get_pretrained(ctxs: List[mx.Context], name: str = 'bert-base-en-uncased', p
             tokenizer = transformers.DistilBertTokenizer.from_pretrained(model_fullname)
             vocab = None
 
-        elif model_name.startswith('xlm-'):
+        elif model_name.startswith('xlm-') or 'xlm' == os.environ.get('MLM_MODEL_NAME', ''):
 
             model, loading_info = transformers.XLMWithLMHeadModel.from_pretrained(model_fullname, output_loading_info=True)
             tokenizer = transformers.XLMTokenizer.from_pretrained(model_fullname)
@@ -141,6 +131,16 @@ def get_pretrained(ctxs: List[mx.Context], name: str = 'bert-base-en-uncased', p
             #     }
             # )
             # model.load_state_dict(new_state_dict)
+
+        elif model_name.startswith('bert-') or 'bert' == os.environ.get('MLM_MODEL_NAME', ''):
+
+            if params_file is None:
+                model, loading_info = BertForMaskedLMOptimized.from_pretrained(model_fullname, output_loading_info=True)
+            else:
+                model, loading_info = BertForMaskedLMOptimized.from_pretrained(params_file, output_loading_info=True)
+
+            tokenizer = transformers.BertTokenizer.from_pretrained(model_fullname)
+            vocab = None
 
         else:
             raise ValueError("Model '{}' is not currently a supported PyTorch model".format(name))
