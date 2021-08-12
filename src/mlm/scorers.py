@@ -34,19 +34,19 @@ class BaseScorer(ABC):
         self._eos = eos
         self._capitalize = capitalize
         self._max_length = 1024
-        if not self._check_support(model):
-            raise ValueError(f"""
-Model '{model.__class__.__name__}' is not supported by the scorer '{self.__class__.__name__}'.
-- MLMScorer supports MXNet GluonNLP MLMs: {SUPPORTED_MLMS}
-- LMScorer supports MXNet GluonNLP LMs: {SUPPORTED_LMS}
-- MLMScorerPT supports PyTorch Transformers MLMs:
-    - 'albert-*' (wrapped by AlbertForMaskedLMOptimized)
-    - 'bert-*' (wrapped by BertForMaskedLMOptimized)
-    - 'distilbert-*' (wrapped by DistilBertForMaskedLMOptimized)
-    - 'xlm-*' (some variants require 'lang' parameter; XLM-R not supported)
-""")
-        else:
-            logging.warn(f"Created scorer of class '{self.__class__.__name__}'.")
+#         if not self._check_support(model):
+#             raise ValueError(f"""
+# Model '{model.__class__.__name__}' is not supported by the scorer '{self.__class__.__name__}'.
+# - MLMScorer supports MXNet GluonNLP MLMs: {SUPPORTED_MLMS}
+# - LMScorer supports MXNet GluonNLP LMs: {SUPPORTED_LMS}
+# - MLMScorerPT supports PyTorch Transformers MLMs:
+#     - 'albert-*' (wrapped by AlbertForMaskedLMOptimized)
+#     - 'bert-*' (wrapped by BertForMaskedLMOptimized)
+#     - 'distilbert-*' (wrapped by DistilBertForMaskedLMOptimized)
+#     - 'xlm-*' (some variants require 'lang' parameter; XLM-R not supported)
+# """)
+#         else:
+        logging.warn(f"Created scorer of class '{self.__class__.__name__}'.")
 
 
     def _apply_tokenizer_opts(self, sent: str) -> str:
