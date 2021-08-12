@@ -610,7 +610,7 @@ class MLMScorerPT(BaseScorer):
 
         for sent_idx, sent in enumerate(corpus.values()):
             sent = self._apply_tokenizer_opts(sent)
-            ids_original = np.array(self._tokenizer.encode(sent, add_special_tokens=True))
+            ids_original = np.array(self._tokenizer.encode(sent, add_special_tokens=True, truncation=True))
 
             # Enforce max length
             if len(ids_original) > self._max_length:
