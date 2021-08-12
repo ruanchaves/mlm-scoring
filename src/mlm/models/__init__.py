@@ -91,7 +91,13 @@ def get_pretrained(ctxs: List[mx.Context], name: str = 'bert-base-en-uncased', p
         model_fullname = name
         model_name = model_fullname.split('/')[-1]
 
-        if model_name.startswith('albert-') or 'albert' == os.environ.get('MLM_MODEL_NAME', ''):
+        if os.environ.get("MLM_MODEL_NAME", "") == "auto":
+
+            model = transformers.AutoModelForMaskedLM.from_pretrained(model_fullname)
+            tokenizer = transformers.AutoTokenizer.from_pretrained(model_fullname)
+            vocab = None
+
+        elif model_name.startswith('albert-') or 'albert' == os.environ.get('MLM_MODEL_NAME', ''):
 
             if params_file is None:
                 model, loading_info = AlbertForMaskedLMOptimized.from_pretrained(model_fullname, output_loading_info=True)
